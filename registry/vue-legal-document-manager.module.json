@@ -1,0 +1,72 @@
+{
+  "id": "vue-legal-document-manager",
+  "name": "Select documents",
+  "description": "Review what retrieval found: exclude instruments with a reason, add ones it missed, tick provisions in or out, read the full text. Every decision is logged as provenance.",
+  "icon": "documents",
+  "version": "0.1.0",
+  "kind": "ui",
+  "runtime": "web",
+  "entry": {
+    "package": "vue-legal-document-manager",
+    "component": "DocumentManager",
+    "style": "vue-legal-document-manager/style.css"
+  },
+  "host": "ProvisionSelection",
+  "services": [
+    "bluelab"
+  ],
+  "worksIn": [
+    "pipeline",
+    "workspace"
+  ],
+  "inputs": [
+    {
+      "name": "ranked",
+      "type": "ranked-provisions@1",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "selection",
+      "type": "provision-set@1"
+    }
+  ],
+  "config": [
+    {
+      "key": "min_documents",
+      "label": "Warn below this many documents",
+      "type": "number",
+      "default": 2,
+      "help": "The low-document-count guardrail. 0 turns it off."
+    },
+    {
+      "key": "high_score_warning",
+      "label": "Warn when excluding above score",
+      "type": "number",
+      "default": 0.3,
+      "help": "Excluding a document scoring at least this much asks the person to confirm."
+    },
+    {
+      "key": "require_exclusion_reason",
+      "label": "Require a reason to exclude",
+      "type": "select",
+      "options": [
+        "yes",
+        "no"
+      ],
+      "default": "yes"
+    },
+    {
+      "key": "include_preambles_on_add",
+      "label": "Adding a document selects its preamble",
+      "type": "select",
+      "options": [
+        "yes",
+        "no"
+      ],
+      "default": "no",
+      "help": "Preambles are kept out of the retrieval index. The old dashboard selected them on manual add and then silently dropped them; this makes the choice explicit."
+    }
+  ]
+}

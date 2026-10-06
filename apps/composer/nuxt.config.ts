@@ -14,6 +14,9 @@ export default defineNuxtConfig({
       process.env.LEGAL_BLOCKS_PLATFORM_IMAGE ?? "ghcr.io/maastrichtu-biss/legal-blocks-platform",
     iaaImage: process.env.LEGAL_BLOCKS_IAA_IMAGE ?? "ghcr.io/maastrichtu-biss/lawnotation-iaa",
     iaaVersion: process.env.LEGAL_BLOCKS_IAA_VERSION ?? "dev",
+    bluelabImage:
+      process.env.LEGAL_BLOCKS_BLUELAB_IMAGE ?? "ghcr.io/maastrichtu-biss/bluelab-service",
+    bluelabVersion: process.env.LEGAL_BLOCKS_BLUELAB_VERSION ?? "dev",
   },
 
   nitro: {

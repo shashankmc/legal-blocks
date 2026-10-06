@@ -8,8 +8,11 @@
     "@legal-blocks/manifest": "*",
     "legal-annotation-kit": "^1.0.0",
     "vue-iaa-metrics": "^1.1.0",
+    "vue-legal-case-builder": "github:shashankmc/vue-legal-case-builder",
     "vue-legal-docs-import": "^1.1.0",
     "vue-legal-docs-visualizer": "^1.2.0",
+    "vue-legal-document-manager": "github:shashankmc/vue-legal-document-manager",
+    "vue-legal-provision-retriever": "github:shashankmc/vue-legal-provision-retriever",
     "vue-legal-query-builder": "^2.1.0",
     "vue-legal-workspace": "^1.2.0"
   }

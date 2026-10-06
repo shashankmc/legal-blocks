@@ -1,0 +1,66 @@
+{
+  "id": "vue-legal-case-builder",
+  "name": "Describe the case",
+  "description": "Pick a prepared compliance scenario or describe your own: a fact pattern plus structured facts (who, what, where, when). Produces the case every later step works on.",
+  "icon": "case",
+  "version": "0.1.0",
+  "kind": "source",
+  "runtime": "web",
+  "entry": {
+    "package": "vue-legal-case-builder",
+    "component": "LegalCaseForm",
+    "style": "vue-legal-case-builder/style.css"
+  },
+  "host": "CaseSource",
+  "services": [
+    "bluelab"
+  ],
+  "worksIn": [
+    "pipeline",
+    "workspace"
+  ],
+  "outputs": [
+    {
+      "name": "case",
+      "type": "case@1"
+    }
+  ],
+  "config": [
+    {
+      "key": "mode",
+      "label": "Form",
+      "type": "select",
+      "options": [
+        "scenarios",
+        "custom",
+        "both"
+      ],
+      "optionLabels": {
+        "scenarios": "Prepared scenarios only",
+        "custom": "Own case only",
+        "both": "Prepared scenarios or own case"
+      },
+      "default": "both",
+      "help": "Prepared scenarios come from the service's data/scenarios folder. An own case is typed in by whoever uses the platform."
+    },
+    {
+      "key": "fact_fields",
+      "label": "Structured fact fields",
+      "type": "text",
+      "default": "who, what, where_collected, when_collected, commercial_pathway, dsi, pressure",
+      "showWhen": {
+        "mode": [
+          "custom",
+          "both"
+        ]
+      },
+      "help": "Comma-separated. These are the chips shown under the fact pattern, matching brief.json's facts keys."
+    },
+    {
+      "key": "title",
+      "label": "Form title",
+      "type": "text",
+      "default": "Describe the case"
+    }
+  ]
+}

@@ -15,6 +15,11 @@ export interface ExportOptions {
    * file when the pipeline actually uses it.
    */
   iaaImage: string;
+  /**
+   * The BlueLab compliance service's image, with its tag. Only named in the
+   * compose file when the pipeline actually uses it.
+   */
+  bluelabImage: string;
   /** Port the platform is published on. 0 or absent means the default. */
   port?: number;
   /**

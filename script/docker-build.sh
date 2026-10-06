@@ -47,6 +47,7 @@ docker build --target composer \
 	--build-arg "VERSION=$VERSION" \
 	--build-arg "PLATFORM_IMAGE=$REGISTRY/legal-blocks-platform" \
 	--build-arg "IAA_IMAGE=$REGISTRY/lawnotation-iaa" \
+	--build-arg "BLUELAB_IMAGE=$REGISTRY/bluelab-service" \
 	-t "$COMPOSER" .
 
 echo

@@ -8,6 +8,7 @@ import { buildExport, exportFilename } from "../src/index.js";
 const REGISTRY_DIR = fileURLToPath(new URL("../../../registry", import.meta.url));
 const PLATFORM = "ghcr.io/example/legal-blocks-platform:1.2.3";
 const IAA = "ghcr.io/example/lawnotation-iaa:1.2.3";
+const BLUELAB = "ghcr.io/example/bluelab-service:1.2.3";
 
 let reg: Registry;
 beforeAll(async () => {
@@ -26,12 +27,18 @@ const searching = `{"version":1,"name":"Find cases","kind":"pipeline","nodes":[
    "config":{"api_token":"secret-value","api_base_url":"https://example.invalid"}},
   {"id":"viz1","module":"vue-legal-docs-visualizer"}]}`;
 
+/** BlueLab's compliance chain: its modules call the BlueLab service. */
+const blueLab = `{"version":1,"name":"Compliance","kind":"pipeline","nodes":[
+  {"id":"case1","module":"vue-legal-case-builder"},
+  {"id":"find1","module":"vue-legal-provision-retriever"}]}`;
+
 function build(body: string): Record<string, string> {
   const zip = buildExport({
     pipeline: parsePipeline(body, reg),
     registry: reg,
     platformImage: PLATFORM,
     iaaImage: IAA,
+    bluelabImage: BLUELAB,
   });
   const out: Record<string, string> = {};
   for (const [name, bytes] of Object.entries(unzipSync(zip))) out[name] = strFromU8(bytes);
@@ -59,6 +66,18 @@ describe("what an export contains", () => {
   it("only ships the agreement service when the pipeline uses it", () => {
     expect(build(searching)["docker-compose.yml"]).not.toContain("agreement");
     expect(build(workspace)["docker-compose.yml"]).toContain("agreement:");
+  });
+
+  // Same rule for the BlueLab service: a pipeline that uses BlueLab's modules
+  // gets the container and its URL; one that does not, does not.
+  it("only ships the BlueLab service when the pipeline uses it", () => {
+    expect(build(searching)["docker-compose.yml"]).not.toContain("bluelab:");
+    const compose = build(blueLab)["docker-compose.yml"]!;
+    expect(compose).toContain(`image: ${BLUELAB}`);
+    expect(compose).toContain("bluelab:");
+    expect(compose).toContain("LEGAL_BLOCKS_BLUELAB_URL: http://bluelab:8000");
+    // The service is reached over the compose network, never published.
+    expect(compose.match(/ports:/g)).toHaveLength(1);
   });
 
   // The platform has no login, so anything that can reach the port can read

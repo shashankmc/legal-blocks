@@ -1,0 +1,82 @@
+{
+  "id": "vue-legal-provision-retriever",
+  "name": "Find relevant provisions",
+  "description": "Ranks the instruments and provisions of the treaty corpus against the case, with TF-IDF, BM25, SBERT or any method the service offers. A threshold decides what counts as retrieved.",
+  "icon": "search",
+  "version": "0.1.0",
+  "kind": "ui",
+  "runtime": "web",
+  "entry": {
+    "package": "vue-legal-provision-retriever",
+    "component": "ProvisionRetriever",
+    "style": "vue-legal-provision-retriever/style.css"
+  },
+  "host": "ProvisionSearch",
+  "services": [
+    "bluelab"
+  ],
+  "worksIn": [
+    "pipeline",
+    "workspace"
+  ],
+  "inputs": [
+    {
+      "name": "case",
+      "type": "case@1",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "ranked",
+      "type": "ranked-provisions@1"
+    }
+  ],
+  "config": [
+    {
+      "key": "methods",
+      "label": "Methods offered",
+      "type": "text",
+      "default": "tfidf, bm25, sbert",
+      "help": "Comma-separated method ids, as listed by the service's methods operation. Leave one to hide the picker."
+    },
+    {
+      "key": "default_method",
+      "label": "Default method",
+      "type": "select",
+      "options": [
+        "tfidf",
+        "bm25",
+        "sbert"
+      ],
+      "optionLabels": {
+        "tfidf": "TF-IDF",
+        "bm25": "BM25",
+        "sbert": "SBERT"
+      },
+      "default": "bm25"
+    },
+    {
+      "key": "default_threshold",
+      "label": "Default threshold",
+      "type": "number",
+      "default": 0.2,
+      "help": "0 to 1. Documents and provisions scoring at or above it are retrieved. BM25 scores are normalised per query, so the same number means different things for each method."
+    },
+    {
+      "key": "show_evaluation",
+      "label": "Research mode",
+      "type": "select",
+      "options": [
+        "off",
+        "admin"
+      ],
+      "optionLabels": {
+        "off": "Never",
+        "admin": "For admins only"
+      },
+      "default": "off",
+      "help": "Shows relevant/distractor badges and precision, recall and F1 against the scenario's ground truth. The service only returns ground truth to the admin role."
+    }
+  ]
+}

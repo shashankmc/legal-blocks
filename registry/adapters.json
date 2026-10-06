@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "from": "provision-set@1",
+    "to": "corpus@1",
+    "description": "Each selected provision becomes one document: name = prov_id, full_text = the provision's verbatim text. Scores, provenance and exclusions are dropped."
+  }
+]

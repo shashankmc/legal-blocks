@@ -19,5 +19,6 @@ export function images() {
   return {
     platformImage: `${cfg.platformImage}:${cfg.version}`,
     iaaImage: `${cfg.iaaImage}:${cfg.iaaVersion}`,
+    bluelabImage: `${cfg.bluelabImage}:${cfg.bluelabVersion}`,
   };
 }

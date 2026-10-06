@@ -51,6 +51,7 @@ export function compose(opts: ExportOptions, hasCredentials: boolean): string {
   const id = opts.id ?? newId();
   const port = opts.port || DEFAULT_PORT;
   const needsIaa = serviceIds(opts.pipeline, opts.registry).includes("lawnotation-iaa");
+  const needsBluelab = serviceIds(opts.pipeline, opts.registry).includes("bluelab");
 
   const lines = [
     `# ${opts.pipeline.name}`,
@@ -83,12 +84,24 @@ export function compose(opts: ExportOptions, hasCredentials: boolean): string {
   // what shipped, because Docker Desktop virtualises that away on a Mac.
   lines.push("      - data:/app/data");
 
+  // The platform reaches each service over the compose network by name. Both
+  // blocks are written together so the environment/depends_on keys sit on the
+  // platform service and not inside a service block appended below.
+  const environment: string[] = [];
+  const dependsOn: string[] = [];
+  if (needsIaa) {
+    environment.push("      LEGAL_BLOCKS_IAA_URL: http://agreement:8080");
+    dependsOn.push("      - agreement");
+  }
+  if (needsBluelab) {
+    environment.push("      LEGAL_BLOCKS_BLUELAB_URL: http://bluelab:8000");
+    dependsOn.push("      - bluelab");
+  }
+  if (environment.length) lines.push("    environment:", ...environment);
+  if (dependsOn.length) lines.push("    depends_on:", ...dependsOn);
+
   if (needsIaa) {
     lines.push(
-      "    environment:",
-      "      LEGAL_BLOCKS_IAA_URL: http://agreement:8080",
-      "    depends_on:",
-      "      - agreement",
       "",
       "  # Computes inter-annotator agreement. Reached by the platform over the",
       "  # compose network and deliberately not published on your machine.",
@@ -98,7 +111,22 @@ export function compose(opts: ExportOptions, hasCredentials: boolean): string {
     );
   }
 
-  // Last, because both blocks above append to the same list and a top-level
+  if (needsBluelab) {
+    lines.push(
+      "",
+      "  # BlueLab's legal-compliance service: the provision corpus, retrieval,",
+      "  # selection and annotation operations the BlueLab modules call. Reached",
+      "  # over the compose network and deliberately not published on your machine.",
+      "  bluelab:",
+      `    image: ${opts.bluelabImage}`,
+      "    restart: unless-stopped",
+      "    environment:",
+      "      # Ground truth (research mode) stays off unless a deployment turns it on.",
+      '      BLUELAB_RESEARCH_MODE: "off"',
+    );
+  }
+
+  // Last, because the blocks above append to the same list and a top-level
   // key cannot sit inside a service.
   lines.push("", "volumes:", "  data:");
 

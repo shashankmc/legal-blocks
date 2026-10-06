@@ -33,6 +33,7 @@ COPY . .
 ARG VERSION=dev
 ARG PLATFORM_IMAGE=ghcr.io/maastrichtu-biss/legal-blocks-platform
 ARG IAA_IMAGE=ghcr.io/maastrichtu-biss/lawnotation-iaa
+ARG BLUELAB_IMAGE=ghcr.io/maastrichtu-biss/bluelab-service
 
 # Each app builds to its own .output. Nuxt inlines runtimeConfig defaults at
 # build time, which is how the composer ends up knowing which images to name.
@@ -40,6 +41,8 @@ RUN LEGAL_BLOCKS_VERSION="$VERSION" \
     LEGAL_BLOCKS_PLATFORM_IMAGE="$PLATFORM_IMAGE" \
     LEGAL_BLOCKS_IAA_IMAGE="$IAA_IMAGE" \
     LEGAL_BLOCKS_IAA_VERSION="$VERSION" \
+    LEGAL_BLOCKS_BLUELAB_IMAGE="$BLUELAB_IMAGE" \
+    LEGAL_BLOCKS_BLUELAB_VERSION="$VERSION" \
     npm run build
 
 # --- composer -----------------------------------------------------------------
