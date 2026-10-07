@@ -1,0 +1,58 @@
+{
+  "id": "bluelab-link-graph",
+  "name": "Build the link graph",
+  "description": "Turns annotated provisions and the typed links between them into a graph: each instrument a group, each provision a node inside it, each link an edge labelled with its type. Shows a short summary before passing the graph on.",
+  "icon": "graph",
+  "version": "0.1.0",
+  "kind": "ui",
+  "runtime": "web",
+  "entry": {
+    "package": "vue-legal-link-graph",
+    "component": "LinkGraphBuilder",
+    "style": "vue-legal-link-graph/style.css"
+  },
+  "host": "LinkGraph",
+  "services": [
+    "bluelab"
+  ],
+  "worksIn": [
+    "pipeline",
+    "workspace"
+  ],
+  "inputs": [
+    {
+      "name": "task",
+      "type": "annotated-task@1",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "documents",
+      "type": "document-set@1"
+    }
+  ],
+  "config": [
+    {
+      "key": "group_by_instrument",
+      "label": "Group provisions by instrument",
+      "type": "select",
+      "options": [
+        "yes",
+        "no"
+      ],
+      "default": "yes",
+      "help": "Collapse provisions into one node per instrument. Needs the visualizer's compound-node support (parent field); without it the graph is flat."
+    },
+    {
+      "key": "include_unlinked",
+      "label": "Show provisions with no links",
+      "type": "select",
+      "options": [
+        "yes",
+        "no"
+      ],
+      "default": "yes"
+    }
+  ]
+}

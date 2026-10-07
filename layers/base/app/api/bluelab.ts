@@ -8,6 +8,7 @@
 import type { CaseSummary, CaseV1 } from "vue-legal-case-builder";
 import type { MethodOption, RankedProvisionsV1 } from "vue-legal-provision-retriever";
 import type { CorpusDoc, FullDocument } from "vue-legal-document-manager";
+import type { DocumentSetGraph, ImportedAnnotations } from "vue-legal-link-graph";
 import { json } from "./http";
 
 interface CallOptions {
@@ -62,4 +63,22 @@ export const groundTruth = (caseId: string, role = "admin") =>
   call<{ relevant_doc_ids: string[] }>("ground-truth", {
     query: { case_id: caseId },
     role,
+  });
+
+/** annotation/import: a TaskData -> { provisions, links }. */
+export const importAnnotations = (taskData: unknown) =>
+  call<ImportedAnnotations>("annotation/import", {
+    method: "POST",
+    body: { task_data: taskData },
+  });
+
+/** graph: annotated provisions + typed links -> document-set@1. */
+export const buildGraph = (
+  provIds: string[],
+  links: unknown[],
+  groupByInstrument = false,
+) =>
+  call<DocumentSetGraph>("graph", {
+    method: "POST",
+    body: { prov_ids: provIds, links, group_by_instrument: groupByInstrument },
   });

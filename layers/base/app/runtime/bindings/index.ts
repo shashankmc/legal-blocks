@@ -22,6 +22,7 @@ import type { Kind } from "../../types";
 import { AnnotationSource } from "./annotation";
 import { CaseSource } from "./cases";
 import { DocumentImport, DocumentPassthrough, DocumentSearch } from "./documents";
+import { LinkGraph } from "./linkGraph";
 import { MetricsSource } from "./metrics";
 import { ProvisionSearch } from "./retrieval";
 import { ProvisionSelection } from "./selection";
@@ -46,6 +47,7 @@ const contracts: Record<string, KindBindings> = {
   CaseSource,
   ProvisionSearch,
   ProvisionSelection,
+  LinkGraph,
 };
 
 export function bindingFor(host: string | undefined, kind: Kind): Binding {

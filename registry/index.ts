@@ -11,6 +11,7 @@
 // Adding a module means adding a line here and nothing else on this side.
 
 import adapters from "./adapters.json";
+import bluelabLinkGraph from "./bluelab-link-graph.module.json";
 import legalAnnotationKit from "./legal-annotation-kit.module.json";
 import vueIaaMetrics from "./vue-iaa-metrics.module.json";
 import vueLegalCaseBuilder from "./vue-legal-case-builder.module.json";
@@ -29,6 +30,7 @@ export const manifests: unknown[] = [
   vueLegalCaseBuilder,
   vueLegalProvisionRetriever,
   vueLegalDocumentManager,
+  bluelabLinkGraph,
 ];
 
 export { adapters };

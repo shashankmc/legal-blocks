@@ -20,6 +20,7 @@ const packages: Record<string, Loader> = {
   "vue-legal-case-builder": () => import("vue-legal-case-builder"),
   "vue-legal-provision-retriever": () => import("vue-legal-provision-retriever"),
   "vue-legal-document-manager": () => import("vue-legal-document-manager"),
+  "vue-legal-link-graph": () => import("vue-legal-link-graph"),
 };
 
 // Styles are separate entry points in these packages, and importing a
@@ -35,6 +36,7 @@ const styles: Record<string, () => Promise<unknown>> = {
   "vue-legal-case-builder/style.css": () => import("vue-legal-case-builder/style.css"),
   "vue-legal-provision-retriever/style.css": () => import("vue-legal-provision-retriever/style.css"),
   "vue-legal-document-manager/style.css": () => import("vue-legal-document-manager/style.css"),
+  "vue-legal-link-graph/style.css": () => import("vue-legal-link-graph/style.css"),
 };
 
 const loaded = new Set<string>();

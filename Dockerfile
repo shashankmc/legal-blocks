@@ -23,12 +23,18 @@ COPY package.json package-lock.json ./
 COPY packages/manifest/package.json ./packages/manifest/
 COPY packages/db/package.json ./packages/db/
 COPY packages/export/package.json ./packages/export/
+COPY packages/vue-legal-link-graph/package.json ./packages/vue-legal-link-graph/
 COPY layers/base/package.json ./layers/base/
 COPY apps/composer/package.json ./apps/composer/
 COPY apps/platform/package.json ./apps/platform/
 RUN npm ci
 
 COPY . .
+
+# The link-graph workspace package has no prepare script (its source is not
+# present at npm ci time), so build it explicitly before the apps that import
+# it.
+RUN npm -w vue-legal-link-graph run build
 
 ARG VERSION=dev
 ARG PLATFORM_IMAGE=ghcr.io/maastrichtu-biss/legal-blocks-platform

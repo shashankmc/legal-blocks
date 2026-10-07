@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // From the environment at request time: the compose file sets this.
-  const base = process.env["BLUELAB_SERVICE_URL"];
+  const base = process.env["LEGAL_BLOCKS_BLUELAB_URL"];
   if (!base) {
     throw fail(
       event,
